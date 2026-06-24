@@ -28,23 +28,26 @@ spec:
             - staging
             - prod
 
+
+
   steps:
     - id: fetch-base
       name: Fetch Base
       action: fetch:template
       input:
         url: ./template
+        targetPath: ./
         values:
-          app_name: ${{parameters.component_id}}
-          app_env: ${{parameters.environment}}
+          app_name: ${{ parameters.component_id }}
+          app_env: ${{ parameters.environment }}
 
     - id: publish
       name: Publish
       action: publish:github
       input:
-        
+        sourcePath: ./
         description: This is ${{ parameters.component_id }}
-        repoUrl: github.com?owner=kriskunaldg&repo=${{parameters.component_id}}
+        repoUrl: github.com?owner=kriskunaldg&repo=${{ parameters.component_id }}
         protectDefaultBranch: false
         repoVisibility: public
 
@@ -55,7 +58,10 @@ spec:
         repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
         catalogInfoPath: "/catalog-info.yaml"
 
-  output:
-    links:
-      - title: Repository
-        url: ${{ steps['publish'].output.remoteUrl }}
+    - id: debug-workspace
+      name: Debug Workspace
+      action: debug:log
+      input:
+        message: "Workspace after fetch-base"
+        listWorkspace: "with-contents"
+
