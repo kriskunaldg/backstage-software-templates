@@ -56,7 +56,7 @@ spec:
       action: catalog:register
       input:
         repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
-        catalogInfoPath: "/catalog-info.yaml"
+        catalogInfoPath: "template/catalog-info.yaml"
 
     - id: debug-workspace
       name: Debug Workspace
